@@ -1,0 +1,15 @@
+    def knapSack(self, w, val, wt):
+        # code here
+        n=len(val)
+        t=[[-1 for _ in range(w+1)]for _ in range(n+1)]
+        for i in range(n+1):
+            for j in range(w+1):
+                if i==0 or j==0:
+                    t[i][j]=0    
+                
+                elif wt[i-1]<=w:
+                    t[i][j]=max(val[i-1]+t[n-1][j-wt[i-1]],t[i-1][j])
+                else:
+                    t[i][j]=t[i-1][j]
+        return t[i][j]
+        
