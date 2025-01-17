@@ -1,0 +1,53 @@
+class Solution:
+    def maxTaxiEarnings(self, n: int, rides: List[List[int]]) -> int:
+        ridestartat=defaultdict(list)
+        for s,e ,t in rides:
+            ridestartat[s].append([e,e-s+t])
+
+        dp=[0]*(n+1)
+        for i in range(n-1,0,-1):
+            for e,d in ridestartat[i]:
+                dp[i]=max(dp[i],dp[e]+d)
+            dp[i]=max(dp[i],dp[i+1])
+
+        return dp[1]
+
+
+
+
+from typing import List
+from bisect import bisect_right
+
+class Solution:
+    def maxTaxiEarnings(self, n: int, rides: List[List[int]]) -> int:
+        rides.sort(key=lambda x: x[1])
+        dp = [0]
+        dp_end = [0]
+
+        for start, end, tip in rides:
+
+//We may want to insert an element in a sorted list, but we still want to maintain the sort order after insertion. If we do this operation over a long list, this will become a costly operation. We can use the bisect module in this situation, which ensures that the list is put in sorted order automatically.
+
+// bisect right  returns the right-most index to insert the given element while maintaining the sorted order.
+            prev_idx = bisect_right(dp_end, start) - 1
+            dp_cur_trip = dp[prev_idx] + tip + end - start
+            if dp_end[-1] == end:
+                dp[-1] = max(dp[-1], dp_cur_trip)
+            elif dp[-1] < dp_cur_trip:
+                dp.append(dp_cur_trip)
+                dp_end.append(end)
+
+        return dp[-1]
+
+# Example usage:
+n = 10
+rides = [
+    [1, 5, 5],  # Ride 1
+    [2, 6, 6],  # Ride 2
+    [3, 10, 20], # Ride 3
+    [5, 9, 9],  # Ride 4
+]
+
+solution = Solution()
+max_earnings = solution.maxTaxiEarnings(n, rides)
+print(f"The maximum taxi earnings are: {max_earnings}")
